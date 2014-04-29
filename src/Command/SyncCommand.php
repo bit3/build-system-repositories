@@ -81,7 +81,7 @@ class SyncCommand extends AbstractRepositoriesCommand
 			$this->environment
 		);
 
-		if (in_array($path, $synchronizedPaths)) {
+		if (isset($synchronizedPaths[$path]) && in_array($repository->getRemoteName(), $synchronizedPaths[$path])) {
 			return;
 		}
 
@@ -140,6 +140,13 @@ class SyncCommand extends AbstractRepositoriesCommand
 			default:
 				// TODO
 				throw new \Exception('Incomplete implementation');
+		}
+
+		if (!isset($synchronizedPaths[$path])) {
+			$synchronizedPaths[$path] = array($repository->getRemoteName());
+		}
+		else {
+			$synchronizedPaths[$path][] = $repository->getRemoteName();
 		}
 	}
 }
