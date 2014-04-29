@@ -42,24 +42,22 @@ class PlaceholderReplacer
 	 */
 	public function replace($input, Environment $environment)
 	{
-		$searchReplace = array();
-
-		if ($environment->hasRepository()) {
-			$searchReplace['%type%']  = $environment->getRepository()->getType();
-			$searchReplace['%owner%'] = $environment->getRepository()->getOwner();
-			$searchReplace['%name%']  = $environment->getRepository()->getName();
-
-			foreach (parse_url($environment->getRepository()->getReadUrl()) as $key => $value) {
-				$searchReplace['%' . $key . '%'] = $value;
+		if (is_array($input)) {
+			$array = array();
+			foreach ($input as $key => $value) {
+				$key = $this->replace($key, $environment);
+				$value = $this->replace($value, $environment);
+				$array[$key] = $value;
 			}
+			return $array;
 		}
 
-		if ($environment->getPath()) {
-			$searchReplace['%path%'] = $environment->getPath();
+		if (is_bool($input) || is_int($input) || is_float($input) || is_null($input) || is_resource($input)) {
+			return $input;
 		}
 
-		if ($environment->getVcs() instanceof GitRepository) {
-
+		if (is_object($input)) {
+			$input = (string) $input;
 		}
 
 		return preg_replace_callback(
@@ -87,7 +85,11 @@ class PlaceholderReplacer
 					case 'type':
 						return $environment->getRepository()->getType();
 					case 'repository':
-						return sprintf('%s/%s', $environment->getRepository()->getOwner(), $environment->getRepository()->getName());
+						return sprintf(
+							'%s/%s',
+							$environment->getRepository()->getOwner(),
+							$environment->getRepository()->getName()
+						);
 					case 'owner':
 						return $environment->getRepository()->getOwner();
 					case 'name':
@@ -118,12 +120,12 @@ class PlaceholderReplacer
 
 					case 'tag':
 						if ($environment->getVcs() instanceof GitRepository) {
-							return $environment->getVcs()->describe(GitRepository::DESCRIBE_ALL);
+							return $environment->getVcs()->describe()->all()->execute();
 						}
 						break;
 					case 'commit':
 						if ($environment->getVcs() instanceof GitRepository) {
-							return $environment->getVcs()->revParse();
+							return $environment->getVcs()->revParse()->execute('HEAD');
 						}
 						break;
 
