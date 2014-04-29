@@ -105,7 +105,7 @@ class ExecuteCommand extends AbstractRepositoriesCommand
 					));
 				}
 
-				$vcs->checkout($repository->getRealRef(), true);
+				$vcs->checkout()->force()->execute($repository->getRealRef());
 				break;
 
 			default:

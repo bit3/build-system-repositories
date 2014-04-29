@@ -112,8 +112,9 @@ class SyncCommand extends AbstractRepositoriesCommand
 						);
 					}
 
-					$vcs->cloneRepository($repository->getReadUrl(), null, $repository->getRemoteName());
-					$vcs->remoteSetPushUrl($repository->getWriteUrl());
+					$vcs->cloneRepository()->origin($repository->getRemoteName())->execute($repository->getReadUrl());
+					$vcs->remote()->setUrl($repository->getRemoteName(), $repository->getWriteUrl())->execute();
+					$vcs->remote()->setPushUrl($repository->getRemoteName(), $repository->getWriteUrl())->execute();
 				}
 				else {
 					if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
@@ -125,14 +126,14 @@ class SyncCommand extends AbstractRepositoriesCommand
 						);
 					}
 
-					if (in_array($repository->getRemoteName(), $vcs->listRemotes())) {
-						$vcs->remoteSetFetchUrl($repository->getReadUrl(), $repository->getRemoteName());
+					if (in_array($repository->getRemoteName(), $vcs->remote()->getList())) {
+						$vcs->remote()->setUrl($repository->getRemoteName(), $repository->getReadUrl());
 					}
 					else {
-						$vcs->remoteAdd($repository->getReadUrl(), $repository->getRemoteName());
+						$vcs->remote()->add($repository->getRemoteName(), $repository->getReadUrl());
 					}
-					$vcs->remoteSetPushUrl($repository->getWriteUrl(), $repository->getRemoteName());
-					$vcs->remoteFetch(true, $repository->getRemoteName());
+					$vcs->remote()->setPushUrl($repository->getRemoteName(), $repository->getWriteUrl());
+					$vcs->fetch()->force()->execute($repository->getRemoteName());
 				}
 				break;
 
