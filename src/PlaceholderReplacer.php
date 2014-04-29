@@ -31,11 +31,13 @@ use Symfony\Component\Process\ProcessBuilder;
 class PlaceholderReplacer
 {
 	/**
-	 * @param            $input
-	 * @param Repository $repository
-	 * @param            $vcs
+	 * Replace placeholders in the input.
 	 *
-	 * @return GitRepository
+	 * @param string        $input
+	 * @param Repository    $repository
+	 * @param GitRepository $vcs
+	 *
+	 * @return string
 	 * @throws \Exception
 	 */
 	public function replace($input, Environment $environment)
