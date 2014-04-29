@@ -14,6 +14,7 @@ namespace ContaoCommunityAlliance\BuildSystem\Repositories\Configurator;
 
 use ContaoCommunityAlliance\BuildSystem\Repositories\Action\CommandAction;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Action\CompoundAction;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Action\JsonAction;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Action\ProcessAction;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\AndCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\ConjunctionCondition;
@@ -224,6 +225,12 @@ class YamlConfigurator
 			$settings  = array_merge($inheritSettings, $actionConfiguration);
 
 			$action = new CommandAction($command, $arguments, $settings);
+		}
+		else if (isset($actionConfiguration['json'])) {
+			$file = $actionConfiguration['json'];
+			$settings  = array_merge($inheritSettings, $actionConfiguration);
+
+			$action = new JsonAction($file, $settings);
 		}
 		else if (isset($actionConfiguration['actions'])) {
 			$compoundAction = new CompoundAction();
