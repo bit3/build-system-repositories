@@ -258,4 +258,14 @@ Placeholder reference
 	<tr><th>tag</th><td>The most recent tag name.</td></tr>
 	<tr><th>commit</th><td>The commit name / hash.</td></tr>
 </tbody>
+<tbody>
+	<tr><th>author-name</th><td>The author name.</td></tr>
+	<tr><th>author-email</th><td>The author email.</td></tr>
+	<tr><th>author-date[:format]</th><td>The author date.</td></tr>
+</tbody>
+<tbody>
+	<tr><th>committer-name</th><td>The committer name.</td></tr>
+	<tr><th>committer-email</th><td>The committer email.</td></tr>
+	<tr><th>committer-date[:format]</th><td>The committer date.</td></tr>
+</tbody>
 </table>
