@@ -564,28 +564,34 @@ class GithubProvider implements ProviderInterface
 
 		if (count($branchMatchers) || count($tagMatchers)) {
 			try {
-				$url      = sprintf(
-					'repos/%s/%s/git/refs',
-					rawurlencode($repositoryData['owner']['login']),
-					rawurlencode($repositoryData['name'])
-				);
-				$request  = $this->getClient()->get($url);
-				$response = $request->send();
-				$refsData = $response->json();
-
 				$branchNames = array();
 				$tagNames    = array();
 
-				foreach ($refsData as $refData) {
-					if (preg_match('~^refs/(heads|tags)/(.*)$~', $refData['ref'], $matches)) {
-						switch ($matches[1]) {
-							case 'heads':
-								$branchNames[] = $matches[2];
-								break;
-							case 'tags':
-								$tagNames[] = $matches[2];
-								break;
+				for ($page = 1; true; $page++) {
+					$url      = sprintf(
+						'repos/%s/%s/git/refs?page=' . $page,
+						rawurlencode($repositoryData['owner']['login']),
+						rawurlencode($repositoryData['name'])
+					);
+					$request  = $this->getClient()->get($url);
+					$response = $request->send();
+					$refsData = $response->json();
+
+					foreach ($refsData as $refData) {
+						if (preg_match('~^refs/(heads|tags)/(.*)$~', $refData['ref'], $matches)) {
+							switch ($matches[1]) {
+								case 'heads':
+									$branchNames[] = $matches[2];
+									break;
+								case 'tags':
+									$tagNames[] = $matches[2];
+									break;
+							}
 						}
+					}
+
+					if (empty($refsData)) {
+						break;
 					}
 				}
 
