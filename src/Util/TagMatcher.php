@@ -44,7 +44,7 @@ class TagMatcher
 				},
 				$parts
 			);
-			$this->regexp = '~' . implode('.*', $parts) . '~';
+			$this->regexp = '~^' . implode('.*', $parts) . '$~';
 		}
 	}
 
