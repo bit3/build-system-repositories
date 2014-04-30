@@ -19,6 +19,7 @@ use ContaoCommunityAlliance\BuildSystem\Repositories\Console\RepositoriesManager
 use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Manager;
 use ContaoCommunityAlliance\BuildSystem\Repositories\PlaceholderReplacer;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\CompoundProvider;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\Repository;
 use Guzzle\Http\Client;
 use Monolog\Handler\StreamHandler;
@@ -75,6 +76,12 @@ abstract class AbstractRepositoriesCommand extends Command
 			InputOption::VALUE_REQUIRED,
 			'Sync only repositories from a specific owner (fnmatch wildcard allowed).'
 		);
+		$this->addOption(
+			'provider',
+			'p',
+			InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+			'Only use specific provider.'
+		);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -126,7 +133,23 @@ abstract class AbstractRepositoriesCommand extends Command
 
 		$ownerName      = $input->getOption('owner');
 		$repositoryName = $input->getOption('repository');
-		$repositories   = $this->environment->getConfiguration()->getProvider()->listAll();
+
+		$providers = (array) $input->getOption('provider');
+
+		if (count($providers)) {
+			$compoundProvider = new CompoundProvider($this->environment);
+
+			foreach ($this->environment->getConfiguration()->getProvider()->getProviders() as $provider) {
+				if (in_array($provider->getName(), $providers)) {
+					$compoundProvider->addProvider($provider);
+				}
+			}
+
+			$repositories = $compoundProvider->listAll();
+		}
+		else {
+			$repositories = $this->environment->getConfiguration()->getProvider()->listAll();
+		}
 
 		if ($ownerName || $repositoryName) {
 			$repositories = array_filter(
