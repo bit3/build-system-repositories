@@ -13,10 +13,8 @@
 namespace ContaoCommunityAlliance\BuildSystem\Repositories\Command;
 
 use ContaoCommunityAlliance\BuildSystem\NoOpLogger;
-use ContaoCommunityAlliance\BuildSystem\Repositories\Console\RepositoriesManagerHelperInterface;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\IncompleteConfigurationException;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\NotSynchronizedRepository;
-use ContaoCommunityAlliance\BuildSystem\Repositories\Manager;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\Repository;
 use ContaoCommunityAlliance\BuildSystem\Repository\GitRepository;
 use Guzzle\Http\Client;
