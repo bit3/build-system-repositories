@@ -12,14 +12,65 @@ config:
     directory-scheme: %repository%
 
 providers:
-    # minimum example
-    - { type: github, owner: contao-community-alliance, branches: ["develop"] }
     # full bitbucket example
     bitbucket:
         # the remote name
         remote: origin
         # the provider type
         type: bitbucket
+        # the name of the owner
+        owner: contao-community-alliance
+        # repository specific settings, all matching setting will be merged in order
+        repositories:
+            # a specific repository
+            build-system-repositories:
+                # (optional) select branches to work on
+                branches:
+                    # a specific branch
+                    - "master"
+                    # a simple wildcard branch pattern
+                    - "dev-*"
+                    # a regexp branch pattern (a regexp must start and end with the same non-numeric character)
+                    - "~release/\d+\.\d+~"
+                # (optional) select tags to work on
+                tags:
+                    # a specific version
+                    - 1.2.3
+                    # a simple wildcard version pattern
+                    - 2.*
+                    # a regexp version pattern (a regexp must start and end with the same non-numeric character)
+                    - ~2\.\d+~
+                # (optional) min/max range
+                tag:
+                    min: 1.1
+                    max: 2
+            # a simple wildcard repository pattern
+            build-system-*:
+                ...
+            # a regexp repository pattern (a regexp must start and end with the same non-numeric character)
+            ~^build-system.*~:
+                ...
+        # (optional)
+        tag:
+            # (optional) sort tags in a specific order
+            sorting: desc
+            # (optional) how to compare tags with each other, use a (custom) comparing function here
+            compareFunction: version_compare
+            # (optional) if multiple tags are selected, limit to a specific amount (a value <=0 disable this function)
+            limit: -1
+        # authentication informations
+        auth:
+            # basic auth
+            type: basic
+            username: xxx
+            password: xxx
+
+    # full github example
+    github:
+        # the remote name
+        remote: origin
+        # the provider type
+        type: github
         # the name of the owner
         owner: contao-community-alliance
         # repository specific settings, all matching setting will be merged in order

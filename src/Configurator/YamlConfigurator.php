@@ -26,9 +26,11 @@ use ContaoCommunityAlliance\BuildSystem\Repositories\Configuration;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\IncompleteConfigurationException;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\InvalidConfigurationException;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\AccessTokenAuth;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\BasicAuth;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\BitBucketProvider;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\CompoundProvider;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\GithubProvider;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -138,6 +140,89 @@ class YamlConfigurator
 							default:
 								throw new InvalidConfigurationException(sprintf(
 									'Authentication type "%s" is not supported by bitbucket',
+									$providerConfiguration['type']
+								));
+						}
+					}
+					if (isset($providerConfiguration['blacklist'])) {
+						$provider->setBlacklist((array) $providerConfiguration['blacklist']);
+					}
+
+					$compoundProvider->addProvider($provider);
+					break;
+
+				case 'github':
+					if (!isset($providerConfiguration['owner'])) {
+						throw new IncompleteConfigurationException(sprintf(
+							'Mandatory configuration field "providers[%s].owner" missing',
+							$providerName
+						));
+					}
+
+					$provider = new GithubProvider($environment, $providerName, $providerConfiguration['owner']);
+
+					if (isset($providerConfiguration['remote'])) {
+						$provider->setRemoteName($providerConfiguration['remote']);
+					}
+					if (isset($providerConfiguration['repositories'])) {
+						$provider->setRepositories($providerConfiguration['repositories']);
+					}
+					if (isset($providerConfiguration['tag'])) {
+						if (isset($providerConfiguration['tag']['sorting'])) {
+							$provider->setTagSorting($providerConfiguration['tag']['sorting']);
+						}
+						if (isset($providerConfiguration['tag']['compareFunction'])) {
+							$provider->setTagCompareFunction($providerConfiguration['tag']['compareFunction']);
+						}
+						if (isset($providerConfiguration['tag']['limit'])) {
+							$provider->setTagLimit($providerConfiguration['tag']['limit']);
+						}
+					}
+					if (isset($providerConfiguration['auth'])) {
+						if (!isset($providerConfiguration['auth']['type'])) {
+							throw new IncompleteConfigurationException(sprintf(
+								'Mandatory configuration field "providers[%s].auth.type" missing',
+								$providerName
+							));
+						}
+
+						switch ($providerConfiguration['auth']['type']) {
+							case 'basic':
+								if (!isset($providerConfiguration['auth']['username'])) {
+									throw new IncompleteConfigurationException(sprintf(
+										'Mandatory configuration field "providers[%s].auth.username" missing',
+										$providerName
+									));
+								}
+								if (!isset($providerConfiguration['auth']['password'])) {
+									throw new IncompleteConfigurationException(sprintf(
+										'Mandatory configuration field "providers[%s].auth.password" missing',
+										$providerName
+									));
+								}
+								$auth = new BasicAuth(
+									$providerConfiguration['auth']['username'],
+									$providerConfiguration['auth']['password']
+								);
+								$provider->setAuthentication($auth);
+								break;
+
+							case 'accessToken':
+								if (!isset($providerConfiguration['auth']['accessToken'])) {
+									throw new IncompleteConfigurationException(sprintf(
+										'Mandatory configuration field "providers[%s].auth.accessToken" missing',
+										$providerName
+									));
+								}
+								$auth = new AccessTokenAuth(
+									$providerConfiguration['auth']['accessToken']
+								);
+								$provider->setAuthentication($auth);
+								break;
+
+							default:
+								throw new InvalidConfigurationException(sprintf(
+									'Authentication type "%s" is not supported by github',
 									$providerConfiguration['type']
 								));
 						}
