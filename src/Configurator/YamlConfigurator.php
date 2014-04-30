@@ -88,17 +88,11 @@ class YamlConfigurator
 
 					$provider = new BitBucketProvider($environment, $providerName, $providerConfiguration['owner']);
 
-					if (isset($providerConfiguration['name'])) {
-						$provider->setRemoteName($providerConfiguration['name']);
+					if (isset($providerConfiguration['remote'])) {
+						$provider->setRemoteName($providerConfiguration['remote']);
 					}
-					if (isset($providerConfiguration['filter'])) {
-						$provider->setRepositoryFilter($providerConfiguration['filter']);
-					}
-					if (isset($providerConfiguration['branches'])) {
-						$provider->setBranches($providerConfiguration['branches']);
-					}
-					if (isset($providerConfiguration['tags'])) {
-						$provider->setTags($providerConfiguration['tags']);
+					if (isset($providerConfiguration['repositories'])) {
+						$provider->setRepositories($providerConfiguration['repositories']);
 					}
 					if (isset($providerConfiguration['tag'])) {
 						if (isset($providerConfiguration['tag']['sorting'])) {
@@ -115,7 +109,7 @@ class YamlConfigurator
 						if (!isset($providerConfiguration['auth']['type'])) {
 							throw new IncompleteConfigurationException(sprintf(
 								'Mandatory configuration field "providers[%s].auth.type" missing',
-								$index
+								$providerName
 							));
 						}
 
@@ -124,13 +118,13 @@ class YamlConfigurator
 								if (!isset($providerConfiguration['auth']['username'])) {
 									throw new IncompleteConfigurationException(sprintf(
 										'Mandatory configuration field "providers[%s].auth.username" missing',
-										$index
+										$providerName
 									));
 								}
 								if (!isset($providerConfiguration['auth']['password'])) {
 									throw new IncompleteConfigurationException(sprintf(
 										'Mandatory configuration field "providers[%s].auth.password" missing',
-										$index
+										$providerName
 									));
 								}
 								$auth = new BasicAuth(
@@ -146,6 +140,9 @@ class YamlConfigurator
 									$providerConfiguration['type']
 								));
 						}
+					}
+					if (isset($providerConfiguration['blacklist'])) {
+						$provider->setBlacklist((array) $providerConfiguration['blacklist']);
 					}
 
 					$compoundProvider->addProvider($provider);
