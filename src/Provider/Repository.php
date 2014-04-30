@@ -46,6 +46,8 @@ class Repository
 
 	const REF_TAG = 'tag';
 
+	const REF_COMMIT = 'commit';
+
 	/**
 	 * The provider that provides this repository.
 	 *
