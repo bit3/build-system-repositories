@@ -124,7 +124,7 @@ class CompoundProvider implements ProviderInterface
 		foreach ($this->providers as $provider) {
 			$repositories = array_merge(
 				$repositories,
-				$provider->listAll()
+				array_values($provider->listAll())
 			);
 		}
 
