@@ -627,6 +627,7 @@ class BitBucketProvider implements ProviderInterface
 	protected function buildRepository($repositoryData, $ref, $realRef, $refType)
 	{
 		$repository = new Repository(
+			$this,
 			$repositoryData['owner'],
 			$repositoryData['slug'],
 			$repositoryData['scm']

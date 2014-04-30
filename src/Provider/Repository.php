@@ -47,6 +47,13 @@ class Repository
 	const REF_TAG = 'tag';
 
 	/**
+	 * The provider that provides this repository.
+	 *
+	 * @var ProviderInterface
+	 */
+	protected $provider;
+
+	/**
 	 * The remote name.
 	 *
 	 * @var string
@@ -124,11 +131,20 @@ class Repository
 	 */
 	protected $readonly = false;
 
-	function __construct($owner, $name, $type)
+	function __construct(ProviderInterface $provider, $owner, $name, $type)
 	{
+		$this->provider = $provider;
 		$this->setOwner($owner);
 		$this->setName($name);
 		$this->setType($type);
+	}
+
+	/**
+	 * @return \ContaoCommunityAlliance\BuildSystem\Repositories\Provider\ProviderInterface
+	 */
+	public function getProvider()
+	{
+		return $this->provider;
 	}
 
 	/**
