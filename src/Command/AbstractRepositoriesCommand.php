@@ -100,7 +100,7 @@ abstract class AbstractRepositoriesCommand extends Command
 		if (!$this->environment->hasConfiguration()) {
 			if ($helperSet->has('ccabs:repositories:configuration')) {
 				/** @var ConfigurationHelperInterface $helper */
-				$helper              = $helperSet->get('ccabs:repositories:configuration');
+				$helper = $helperSet->get('ccabs:repositories:configuration');
 				$this->environment->setConfiguration($helper->getConfiguration($this->environment));
 			}
 			else {
@@ -124,7 +124,7 @@ abstract class AbstractRepositoriesCommand extends Command
 		}
 
 		if ($input->hasOption('log') && $input->hasParameterOption('log')) {
-			$logFile = $input->getOption('log');
+			$logFile  = $input->getOption('log');
 			$logLevel = $input->getOption('log-level');
 
 			$logger = new Logger('ccabs:repositories', array(new StreamHandler($logFile, $logLevel)));
