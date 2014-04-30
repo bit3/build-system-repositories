@@ -90,15 +90,23 @@ class JsonAction extends AbstractAction
 		$file = $placeholderReplacer->replace($this->file, $environment);
 		$data = $placeholderReplacer->replace($this->settings['schema'], $environment);
 
-		if (file_exists($file)) {
-			$existingData = file_get_contents($file);
-			$existingData = json_decode($existingData, true);
+		try {
 
-			$data = $this->merge($existingData, $data);
+			if (file_exists($file)) {
+				$existingData = file_get_contents($file);
+				$existingData = json_decode($existingData, true);
+
+				$data = $this->merge($existingData, $data);
+			}
+
+			$data = json_encode($data);
+			file_put_contents($file, $data);
 		}
-
-		$data = json_encode($data);
-		file_put_contents($file, $data);
+		catch (\Exception $e) {
+			if (!isset($this->settings['ignoreFailure']) || !$this->settings['ignoreFailure']) {
+				throw new ActionException('Json action failed', 0, $e);
+			}
+		}
 	}
 
 	/**

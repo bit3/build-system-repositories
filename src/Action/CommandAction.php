@@ -13,6 +13,7 @@
 namespace ContaoCommunityAlliance\BuildSystem\Repositories\Action;
 
 use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\ActionException;
 use ContaoCommunityAlliance\BuildSystem\Repositories\PlaceholderReplacer;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\Repository;
 use ContaoCommunityAlliance\BuildSystem\Repository\GitRepository;
@@ -182,7 +183,10 @@ class CommandAction extends AbstractAction
 		}
 		catch (\Exception $e) {
 			chdir($cwd);
-			throw $e;
+
+			if (!isset($this->settings['ignoreFailure']) || !$this->settings['ignoreFailure']) {
+				throw new ActionException('Command action failed', 0, $e);
+			}
 		}
 	}
 }

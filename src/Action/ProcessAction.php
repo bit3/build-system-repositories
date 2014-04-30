@@ -206,13 +206,13 @@ class ProcessAction extends AbstractAction
 					}
 				}
 			);
-
-			if (!$process->isSuccessful()) {
-				throw new ActionException('Could not execute process ' . $process->getCommandLine() . PHP_EOL . $process->getErrorOutput());
-			}
 		}
 		else {
 			$process->run();
+		}
+
+		if (!$process->isSuccessful() && (!isset($this->settings['ignoreFailure']) || !$this->settings['ignoreFailure'])) {
+			throw new ActionException('Could not execute process ' . $process->getCommandLine() . PHP_EOL . $process->getErrorOutput());
 		}
 	}
 }

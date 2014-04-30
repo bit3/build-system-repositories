@@ -86,6 +86,8 @@ actions:
         env: { ENV: VALUE }
         # process timeout, the default is no timeout
         timeout: 300
+        # ignore that the action has failed, otherwise an exception is thrown
+        ignoreFailure: true
         # a condition to run the action(s) only under certain cases
         if: { not: { fileExists: '/some/path/that/does/NOT/exists' } }
 
