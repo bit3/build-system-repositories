@@ -129,6 +129,33 @@ class PlaceholderReplacer
 						}
 						break;
 
+					case 'author-name':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%an')->revisionRange('HEAD')->execute();
+					case 'author-email':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%ae')->revisionRange('HEAD')->execute();
+					case 'author-date':
+						$format = isset($parts[1]) ? $parts[1] : 'c';
+						$timestamp = $environment->getVcs()->log()->maxCount(1)->format('format:%ai')->revisionRange('HEAD')->execute();
+						$timestamp = strtotime($timestamp);
+						return date($format, $timestamp);
+
+					case 'committer-name':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%cn')->revisionRange('HEAD')->execute();
+					case 'committer-email':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%ce')->revisionRange('HEAD')->execute();
+					case 'committer-date':
+						$format = isset($parts[1]) ? $parts[1] : 'c';
+						$timestamp = $environment->getVcs()->log()->maxCount(1)->format('format:%ci')->revisionRange('HEAD')->execute();
+						$timestamp = strtotime($timestamp);
+						return date($format, $timestamp);
+
+					case 'subject':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%s')->revisionRange('HEAD')->execute();
+					case 'sanitized-subject':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%f')->revisionRange('HEAD')->execute();
+					case 'body':
+						return $environment->getVcs()->log()->maxCount(1)->format('format:%b')->revisionRange('HEAD')->execute();
+
 					case 'date':
 						$format = isset($parts[1]) ? $parts[1] : 'c';
 						return date($format);
