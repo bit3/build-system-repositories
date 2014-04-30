@@ -13,6 +13,7 @@
 namespace ContaoCommunityAlliance\BuildSystem\Repositories;
 
 use ContaoCommunityAlliance\BuildSystem\Repositories\Action\ActionInterface;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\CompoundProvider;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\ProviderInterface;
 
 /**
@@ -113,7 +114,7 @@ class Configuration
 	}
 
 	/**
-	 * @return ProviderInterface
+	 * @return CompoundProvider|ProviderInterface
 	 */
 	public function getProvider()
 	{
