@@ -82,11 +82,6 @@ class ExecuteCommand extends AbstractRepositoriesCommand
 
 		$this->environment->setPath($path);
 
-		$filesystem = new Filesystem();
-		if (!$filesystem->exists($path)) {
-			return false;
-		}
-
 		switch ($repository->getType()) {
 			case Repository::TYPE_GIT:
 				$vcs = new GitRepository($path);
