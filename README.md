@@ -40,10 +40,11 @@ providers:
                     - 2.*
                     # a regexp version pattern (a regexp must start and end with the same non-numeric character)
                     - ~2\.\d+~
-                # (optional) min/max range
+                # (optional)
                 tag:
                     min: 1.1
                     max: 2
+                    ignore: [ 1.2.2, 1.2.4 ]
             # a simple wildcard repository pattern
             build-system-*:
                 ...

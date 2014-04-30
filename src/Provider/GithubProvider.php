@@ -663,7 +663,9 @@ class GithubProvider implements ProviderInterface
 									!empty($settings['tag']['min']) &&
 									call_user_func($this->tagCompareFunction, $settings['tag']['min'], $tagName) > 0 ||
 									!empty($settings['tag']['max']) &&
-									call_user_func($this->tagCompareFunction, $settings['tag']['max'], $tagName) < 0
+									call_user_func($this->tagCompareFunction, $settings['tag']['max'], $tagName) < 0 ||
+									!empty($settings['tag']['ignore']) &&
+									in_array($tagName, (array) $settings['tag']['ignore'])
 								) {
 									continue;
 								}
