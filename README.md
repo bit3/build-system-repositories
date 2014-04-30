@@ -118,6 +118,19 @@ providers:
             username: xxx
             password: xxx
 
+    # full vcs example
+    vcs:
+        type: git
+        remote: "<remote name>"
+        owner: "<owner name>"
+        name: "<repository name>"
+        readUrl: "<repository read url>"
+        writeUrl: "<repository write url>"
+        webUrl: "<repository web url>"
+        ref: "<ref spec>"
+        realRef: "<real ref spec>"
+        refType: "[ branch | tag ]"
+
 # Actions that are executed before the execution is started, for syntax see the actions section
 # Warning: repository specific placeholders are not available here!
 pre:

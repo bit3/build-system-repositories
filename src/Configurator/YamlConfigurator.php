@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\BasicAuth;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\BitBucketProvider;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\CompoundProvider;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\GithubProvider;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\VcsProvider;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -229,6 +230,51 @@ class YamlConfigurator
 					}
 					if (isset($providerConfiguration['blacklist'])) {
 						$provider->setBlacklist((array) $providerConfiguration['blacklist']);
+					}
+
+					$compoundProvider->addProvider($provider);
+					break;
+
+				case 'git':
+				case 'svn':
+				case 'hg':
+					$provider = new VcsProvider($environment, $providerName);
+
+					if (isset($providerConfiguration['remote'])) {
+						$provider->setRemoteName($providerConfiguration['remote']);
+					}
+					if (isset($providerConfiguration['owner'])) {
+						$provider->setRepositoryOwner($providerConfiguration['owner']);
+					}
+					if (isset($providerConfiguration['name'])) {
+						$provider->setRepositoryName($providerConfiguration['name']);
+					}
+					$provider->setVcsType($providerConfiguration['type']);
+					if (isset($providerConfiguration['readUrl'])) {
+						$provider->setRepositoryReadUrl($providerConfiguration['readUrl']);
+					}
+					if (isset($providerConfiguration['writeUrl'])) {
+						$provider->setRepositoryWriteUrl($providerConfiguration['writeUrl']);
+						$provider->setRepositoryReadonly(false);
+					}
+					else {
+						$provider->setRepositoryReadonly(true);
+					}
+					if (isset($providerConfiguration['webUrl'])) {
+						$provider->setRepositoryWebUrl($providerConfiguration['webUrl']);
+					}
+					if (isset($providerConfiguration['ref'])) {
+						$provider->setRepositoryRef($providerConfiguration['ref']);
+						$provider->setRepositoryRealRef($providerConfiguration['realRef']);
+					}
+					if (isset($providerConfiguration['realRef'])) {
+						$provider->setRepositoryRealRef($providerConfiguration['realRef']);
+					}
+					if (isset($providerConfiguration['refType'])) {
+						$provider->setRepositoryRefType($providerConfiguration['refType']);
+					}
+					else {
+						$provider->setRepositoryRefType('commit');
 					}
 
 					$compoundProvider->addProvider($provider);
