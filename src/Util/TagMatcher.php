@@ -33,7 +33,7 @@ class TagMatcher
 		if ($regexp) {
 			$this->regexp = $regexp;
 		}
-		else if (preg_match('~^([\w]).*\1$~', $tag)) {
+		else if (preg_match('~^([^\d]).*\1$~', $tag)) {
 			$this->regexp = $tag;
 		}
 		else {
