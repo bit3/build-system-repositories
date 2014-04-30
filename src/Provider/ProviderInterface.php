@@ -13,6 +13,7 @@
 namespace ContaoCommunityAlliance\BuildSystem\Repositories\Provider;
 
 use ContaoCommunityAlliance\BuildSystem\NoOpLogger;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use Guzzle\Http\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -27,6 +28,20 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 interface ProviderInterface
 {
+	/**
+	 * Return the current environment, used by this provider.
+	 *
+	 * @return Environment
+	 */
+	public function getEnvironment();
+
+	/**
+	 * Get the name of the provider.
+	 *
+	 * @return string
+	 */
+	public function getName();
+
 	/**
 	 * List all repositories from this provider.
 	 *

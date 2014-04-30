@@ -66,14 +66,14 @@ class YamlConfigurator
 			$configuration->setDirectoryScheme($array['config']['directory-scheme']);
 		}
 
-		$compoundProvider = new CompoundProvider();
+		$compoundProvider = new CompoundProvider($environment);
 		$configuration->setProvider($compoundProvider);
 
-		foreach ($array['providers'] as $index => $providerConfiguration) {
+		foreach ($array['providers'] as $providerName => $providerConfiguration) {
 			if (!isset($providerConfiguration['type'])) {
 				throw new IncompleteConfigurationException(sprintf(
 					'Mandatory configuration field "providers[%s].type" missing',
-					$index
+					$providerName
 				));
 			}
 
@@ -82,11 +82,11 @@ class YamlConfigurator
 					if (!isset($providerConfiguration['owner'])) {
 						throw new IncompleteConfigurationException(sprintf(
 							'Mandatory configuration field "providers[%s].owner" missing',
-							$index
+							$providerName
 						));
 					}
 
-					$provider = new BitBucketProvider($environment, $providerConfiguration['owner']);
+					$provider = new BitBucketProvider($environment, $providerName, $providerConfiguration['owner']);
 
 					if (isset($providerConfiguration['name'])) {
 						$provider->setRemoteName($providerConfiguration['name']);

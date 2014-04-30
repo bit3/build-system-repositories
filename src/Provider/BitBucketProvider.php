@@ -35,6 +35,13 @@ class BitBucketProvider implements ProviderInterface
 	protected $environment;
 
 	/**
+	 * The provider name.
+	 *
+	 * @var string
+	 */
+	protected $name;
+
+	/**
 	 * @var string
 	 */
 	protected $remoteName = 'bitbucket';
@@ -104,33 +111,28 @@ class BitBucketProvider implements ProviderInterface
 
 	public function __construct(
 		Environment $environment,
-		$owner,
-		$repositoryFilter = '.*',
-		array $branches = array('master', 'develop'),
-		AuthInterface $authentication = null
+		$name,
+		$owner
 	) {
-		$this->setEnvironment($environment);
-		$this->setOwner($owner);
-		$this->setRepositoryFilter($repositoryFilter);
-		$this->setBranches($branches);
-		$this->setAuthentication($authentication);
-	}
-
-	/**
-	 * @param Environment $environment
-	 */
-	public function setEnvironment(Environment $environment)
-	{
 		$this->environment = $environment;
-		return $this;
+		$this->name        = $name;
+		$this->setOwner($owner);
 	}
 
 	/**
-	 * @return Environment
+	 * {@inheritdoc}
 	 */
 	public function getEnvironment()
 	{
 		return $this->environment;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getName()
+	{
+		return $this->name;
 	}
 
 	/**

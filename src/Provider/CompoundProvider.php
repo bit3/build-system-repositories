@@ -13,6 +13,7 @@
 namespace ContaoCommunityAlliance\BuildSystem\Repositories\Provider;
 
 use ContaoCommunityAlliance\BuildSystem\NoOpLogger;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use Guzzle\Http\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -28,6 +29,11 @@ use Symfony\Component\Process\ProcessBuilder;
 class CompoundProvider implements ProviderInterface
 {
 	/**
+	 * @var Environment
+	 */
+	protected $environment;
+
+	/**
 	 * @var ProviderInterface[]
 	 */
 	protected $providers = array();
@@ -35,9 +41,26 @@ class CompoundProvider implements ProviderInterface
 	/**
 	 * @param array $providers
 	 */
-	public function __construct(array $providers = array())
+	public function __construct(Environment $environment, array $providers = array())
 	{
+		$this->environment = $environment;
 		$this->providers = $providers;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getEnvironment()
+	{
+		return $this->environment;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getName()
+	{
+		return null;
 	}
 
 	public function clearProviders()
