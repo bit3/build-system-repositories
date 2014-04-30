@@ -517,7 +517,7 @@ class GithubProvider implements ProviderInterface
 		foreach ($this->repositories as $pattern => $repositorySettings) {
 			$matcher = new TagMatcher($pattern);
 			if ($matcher->match($repositoryData['name'])) {
-				$settings = array_merge($settings, $repositorySettings);
+				$settings = array_merge_recursive($settings, $repositorySettings);
 			}
 		}
 
