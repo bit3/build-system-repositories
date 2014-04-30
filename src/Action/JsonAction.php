@@ -88,9 +88,17 @@ class JsonAction extends AbstractAction
 		$placeholderReplacer = $environment->getPlaceholderReplacer();
 
 		$file = $placeholderReplacer->replace($this->file, $environment);
+		$options = 0;
 		$data = $placeholderReplacer->replace($this->settings['schema'], $environment);
 
 		try {
+			if (isset($this->settings['options'])) {
+				foreach ((array) $this->settings['options'] as $option) {
+					if (defined($option)) {
+						$options |= constant($option);
+					}
+				}
+			}
 
 			if (file_exists($file)) {
 				$existingData = file_get_contents($file);
@@ -99,7 +107,7 @@ class JsonAction extends AbstractAction
 				$data = $this->merge($existingData, $data);
 			}
 
-			$data = json_encode($data);
+			$data = json_encode($data, $options);
 			file_put_contents($file, $data);
 		}
 		catch (\Exception $e) {
