@@ -49,7 +49,7 @@ class SyncCommand extends AbstractRepositoriesCommand
 
 	public function syncAll(InputInterface $input, OutputInterface $output)
 	{
-		$this->syncEach($this->environment->getProvider()->listAll(), $input, $output);
+		$this->syncEach($this->environment->getConfiguration()->getProvider()->listAll(), $input, $output);
 	}
 
 	public function syncEach(array $repositories, InputInterface $input, OutputInterface $output)
