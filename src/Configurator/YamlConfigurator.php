@@ -21,6 +21,7 @@ use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\ConjunctionCondit
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\FileExistsCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\NotCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\OrCondition;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\ProviderCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Configuration;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\IncompleteConfigurationException;
@@ -311,6 +312,11 @@ class YamlConfigurator
 
 					case 'fileExists':
 						$condition = new FileExistsCondition($settings);
+						$parentCondition->addCondition($condition);
+						break;
+
+					case 'provider':
+						$condition = new ProviderCondition($settings);
 						$parentCondition->addCondition($condition);
 						break;
 
