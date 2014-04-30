@@ -126,7 +126,7 @@ class SyncCommand extends AbstractRepositoriesCommand
 						);
 					}
 
-					if (in_array($repository->getRemoteName(), $vcs->remote()->getList())) {
+					if (in_array($repository->getRemoteName(), $vcs->remote()->getNames())) {
 						$vcs->remote()->setUrl($repository->getRemoteName(), $repository->getReadUrl());
 					}
 					else {
