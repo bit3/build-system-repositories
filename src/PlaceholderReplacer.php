@@ -46,8 +46,8 @@ class PlaceholderReplacer
 		if (is_array($input)) {
 			$array = array();
 			foreach ($input as $key => $value) {
-				$key = $this->replace($key, $environment);
-				$value = $this->replace($value, $environment);
+				$key         = $this->replace($key, $environment);
+				$value       = $this->replace($value, $environment);
 				$array[$key] = $value;
 			}
 			return $array;
