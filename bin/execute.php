@@ -8,6 +8,12 @@ use Symfony\Component\Console\Input\InputOption;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Command\ExecuteCommand;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Console\Application;
 
+set_error_handler(
+	function ($errno, $errstr, $errfile, $errline ) {
+		throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+	}
+);
+
 class ExecuteApplication extends Application
 {
 	/**
