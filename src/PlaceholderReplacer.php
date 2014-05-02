@@ -14,6 +14,7 @@ namespace ContaoCommunityAlliance\BuildSystem\Repositories;
 
 use ContaoCommunityAlliance\BuildSystem\NoOpLogger;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Provider\Repository;
+use ContaoCommunityAlliance\BuildSystem\Repository\GitException;
 use ContaoCommunityAlliance\BuildSystem\Repository\GitRepository;
 use Guzzle\Http\Client;
 use Psr\Log\LoggerInterface;
@@ -128,33 +129,191 @@ class PlaceholderReplacer
 							return $environment->getVcs()->revParse()->execute('HEAD');
 						}
 						break;
+					case 'describe':
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->describe()
+									->abbrev(isset($parts[1]) ? (int) $parts[1] : null)
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
+					case 'describe-tags':
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->describe()
+									->abbrev(isset($parts[1]) ? (int) $parts[1] : null)
+									->tags()
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
+					case 'describe-all':
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->describe()
+									->abbrev(isset($parts[1]) ? (int) $parts[1] : null)
+									->all()
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 
 					case 'author-name':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%an')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%an')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'author-email':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%ae')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%ae')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'author-date':
-						$format = isset($parts[1]) ? $parts[1] : 'c';
-						$timestamp = $environment->getVcs()->log()->maxCount(1)->format('format:%ai')->revisionRange('HEAD')->execute();
-						$timestamp = strtotime($timestamp);
-						return date($format, $timestamp);
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								$format    = isset($parts[1]) ? $parts[1] : 'c';
+								$timestamp = $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%ai')
+									->revisionRange('HEAD')
+									->execute();
+								$timestamp = strtotime($timestamp);
+								return date($format, $timestamp);
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 
 					case 'committer-name':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%cn')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%cn')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'committer-email':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%ce')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%ce')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'committer-date':
-						$format = isset($parts[1]) ? $parts[1] : 'c';
-						$timestamp = $environment->getVcs()->log()->maxCount(1)->format('format:%ci')->revisionRange('HEAD')->execute();
-						$timestamp = strtotime($timestamp);
-						return date($format, $timestamp);
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								$format    = isset($parts[1]) ? $parts[1] : 'c';
+								$timestamp = $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%ci')
+									->revisionRange('HEAD')
+									->execute();
+								$timestamp = strtotime($timestamp);
+								return date($format, $timestamp);
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 
 					case 'subject':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%s')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%s')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'sanitized-subject':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%f')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%f')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 					case 'body':
-						return $environment->getVcs()->log()->maxCount(1)->format('format:%b')->revisionRange('HEAD')->execute();
+						if ($environment->getVcs() instanceof GitRepository) {
+							try {
+								return $environment->getVcs()
+									->log()
+									->maxCount(1)
+									->format('format:%b')
+									->revisionRange('HEAD')
+									->execute();
+							}
+							catch (GitException $e) {
+								return '';
+							}
+						}
+						break;
 
 					case 'date':
 						$format = isset($parts[1]) ? $parts[1] : 'c';
