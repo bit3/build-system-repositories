@@ -22,6 +22,7 @@ use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\FileExistsConditi
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\NotCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\OrCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\ProviderCondition;
+use ContaoCommunityAlliance\BuildSystem\Repositories\Condition\VcsStatusCondition;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Configuration;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Environment;
 use ContaoCommunityAlliance\BuildSystem\Repositories\Exception\IncompleteConfigurationException;
@@ -448,6 +449,11 @@ class YamlConfigurator
 
 					case 'provider':
 						$condition = new ProviderCondition($settings);
+						$parentCondition->addCondition($condition);
+						break;
+
+					case 'vcs-status':
+						$condition = new VcsStatusCondition($settings);
 						$parentCondition->addCondition($condition);
 						break;
 
