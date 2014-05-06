@@ -76,14 +76,19 @@ class SyncCommand extends AbstractRepositoriesCommand
 		OutputInterface $output,
 		array &$synchronizedPaths = array()
 	) {
+		$this->environment->setRepository($repository);
+
 		$path = $this->environment->getPlaceholderReplacer()->replace(
 			$this->environment->getConfiguration()->getStoragePath() . DIRECTORY_SEPARATOR . $this->environment->getConfiguration()->getDirectoryScheme(),
 			$this->environment
 		);
 
 		if (isset($synchronizedPaths[$path]) && in_array($repository->getRemoteName(), $synchronizedPaths[$path])) {
+			$this->environment->setRepository(null);
 			return;
 		}
+
+		$this->environment->setPath($path);
 
 		$filesystem = new Filesystem();
 		if (!$filesystem->exists($path)) {
@@ -101,6 +106,8 @@ class SyncCommand extends AbstractRepositoriesCommand
 		switch ($repository->getType()) {
 			case Repository::TYPE_GIT:
 				$vcs = new GitRepository($path);
+
+				$this->environment->setVcs($vcs);
 
 				if (!$vcs->isInitialized()) {
 					if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
@@ -148,5 +155,9 @@ class SyncCommand extends AbstractRepositoriesCommand
 		else {
 			$synchronizedPaths[$path][] = $repository->getRemoteName();
 		}
+
+		$this->environment->setVcs(null);
+		$this->environment->setPath(null);
+		$this->environment->setRepository(null);
 	}
 }

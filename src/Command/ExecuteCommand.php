@@ -88,6 +88,9 @@ class ExecuteCommand extends AbstractRepositoriesCommand
 					$sync = new SyncCommand();
 					$sync->setEnvironment($this->environment);
 					$sync->sync($repository, $input, $output, $synchronizedPaths);
+
+					$this->environment->setRepository($repository);
+					$this->environment->setPath($path);
 				}
 
 				if (!$vcs->isInitialized()) {
