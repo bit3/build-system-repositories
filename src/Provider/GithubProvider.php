@@ -508,8 +508,15 @@ class GithubProvider implements ProviderInterface
 
 	protected function buildRepositories($repositoryData, &$repositories = array())
 	{
+		// simple blacklist check
 		if (in_array($repositoryData['name'], $this->blacklist)) {
 			return array();
+		}
+		// extended blacklist check
+		foreach ($this->blacklist as $blacklist) {
+			if (fnmatch($blacklist, $repositoryData['name'])) {
+				return array();
+			}
 		}
 
 		$settings = array();
