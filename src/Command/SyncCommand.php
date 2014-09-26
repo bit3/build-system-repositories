@@ -113,7 +113,7 @@ class SyncCommand extends AbstractRepositoriesCommand
 					if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
 						$output->writeln(
 							sprintf(
-								' * <info>ccabs:repositories:sync</info> clean repository <comment>%s</comment>',
+								' * <info>ccabs:repositories:sync</info> clone repository <comment>%s</comment>',
 								$path
 							)
 						);
@@ -127,7 +127,7 @@ class SyncCommand extends AbstractRepositoriesCommand
 					if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
 						$output->writeln(
 							sprintf(
-								' * <info>ccabs:repositories:sync</info> sync repository <comment>%s</comment>',
+								' * <info>ccabs:repositories:sync</info> fetch repository <comment>%s</comment>',
 								$path
 							)
 						);
