@@ -38,7 +38,7 @@ class ExecuteCommand extends AbstractRepositoriesCommand
 	{
 		$this->setName('ccabs:repositories:execute');
 		parent::configure();
-		$this->addOption('sync', 's', InputOption::VALUE_NONE, 'Synchronise before execute the actions.');
+		$this->addOption('sync', null, InputOption::VALUE_NONE, 'Synchronise before execute the actions.');
 	}
 
 	protected function executeOn(array $repositories, InputInterface $input, OutputInterface $output)
